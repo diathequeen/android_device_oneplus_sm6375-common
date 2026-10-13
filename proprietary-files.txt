@@ -23,7 +23,6 @@ odm/lib/rfsa/adsp/libcalculator_skel.so
 odm/lib/rfsa/adsp/libhdr_skel.so
 odm/lib/rfsa/adsp/libhvxFaceBeautyPre_skel.so
 odm/lib/rfsa/adsp/libktveffect.so
-odm/lib/rfsa/adsp/libsnpe_dsp_domains_skel.so
 odm/lib/rfsa/adsp/libsnpe_dsp_skel.so
 odm/lib/rfsa/adsp/libsnpe_dsp_domains_skel.so
 odm/lib/rfsa/adsp/libsnpe_dsp_v65_domains_v2_skel.so
@@ -168,6 +167,8 @@ vendor/etc/cne/profileMwqem.xml
 vendor/etc/default-permissions/com.qualcomm.qti.cne.xml
 vendor/etc/init/cnd.rc
 vendor/lib64/libcne.so
+vendor/lib64/libshsc.so
+vendor/lib64/vendor.qti.hardware.mwqemadapteraidlservice-V1-ndk.so
 vendor/lib64/libcneapiclient.so
 vendor/lib64/libcneoplookup.so
 vendor/lib64/libcneqmiutils.so
@@ -330,6 +331,7 @@ vendor/etc/init/qseecomd.rc
 vendor/etc/init/vendor.qti.hardware.qseecom@1.0-service.rc
 vendor/etc/gpfspath_oem_config.xml
 vendor/lib64/hw/vendor.qti.hardware.qseecom@1.0-impl.so
+vendor/lib64/vendor.qti.hardware.qseecom-V1-ndk.so
 vendor/lib64/libGPreqcancel.so
 vendor/lib64/libGPreqcancel_svc.so
 vendor/lib64/libQSEEComAPI.so
@@ -362,10 +364,16 @@ odm/etc/izat.conf
 odm/etc/sap.conf
 vendor/app/CACertService/CACertService.apk
 vendor/bin/hw/android.hardware.gnss-aidl-service-qti
+vendor/lib64/hw/android.hardware.gnss-aidl-impl-qti.so
 vendor/bin/loc_launcher
+vendor/lib64/libloc_base_util.so
+vendor/lib64/libloc_mq_client.so
 vendor/bin/lowi-server
 vendor/bin/mlid
 vendor/bin/xtra-daemon
+vendor/lib64/libsys_info_cache.so
+vendor/lib64/libpal_net_if.so
+vendor/lib64/libqcc_sdk.so
 vendor/bin/xtwifi-client
 vendor/etc/init/android.hardware.gnss-aidl-service-qti.rc
 vendor/etc/seccomp_policy/gnss@2.0-base.policy
@@ -390,6 +398,8 @@ vendor/lib64/libgeofencing.so
 vendor/lib64/libgps.utils.so
 vendor/lib64/libizat_client_api.so
 vendor/lib64/libizat_core.so
+vendor/lib64/libloc_util.so
+vendor/lib64/libwifiobserver.so
 vendor/lib64/liblbs_core.so
 vendor/lib64/libloc_api_v02.so
 vendor/lib64/libloc_api_wds.so
@@ -399,9 +409,12 @@ vendor/lib64/liblocation_api.so
 vendor/lib64/liblocationservice.so
 vendor/lib64/liblocationservice_glue.so
 vendor/lib64/liblowi_client.so
+vendor/lib64/liblowi_common.so
 vendor/lib64/liblowi_wifihal.so
 vendor/lib64/libminksocket_vendor.so
 vendor/lib64/libqcc_file_agent.so
+vendor/lib64/vendor.qti.hardware.qccsyshal@1.1.so
+vendor/lib64/vendor.qti.hardware.qccsyshal@1.2.so
 vendor/lib64/libsynergy_loc_api.so
 vendor/lib64/libxtadapter.so
 vendor/lib64/vendor.qti.gnss-service.so
@@ -429,6 +442,7 @@ vendor/lib64/egl/libGLESv1_CM_adreno.so
 vendor/lib64/egl/libGLESv2_adreno.so;SYMLINK=vendor/lib64/libGLESv2_adreno.so
 vendor/lib64/egl/libq3dtools_adreno.so;SYMLINK=vendor/lib64/libq3dtools_adreno.so
 vendor/lib64/egl/libq3dtools_esx.so
+vendor/lib64/egl/libVkLayer_ADRENO_qprofiler.so
 vendor/lib64/libCB.so
 vendor/lib64/libOpenCL.so
 vendor/lib64/libadreno_utils.so
@@ -457,6 +471,7 @@ system_ext/framework/oplus-ims-ext.jar
 system_ext/framework/vendor.qti.ims.factory-V2.0-java.jar
 system_ext/lib64/lib-imsvideocodec.so
 system_ext/lib64/lib-imsvt.so
+system_ext/lib64/vendor.qti.ImsRtpService-V2-ndk.so
 system_ext/lib64/lib-imsvtextutils.so
 system_ext/lib64/lib-imsvtutils.so
 system_ext/lib64/libdiag_system.so
@@ -507,9 +522,6 @@ vendor/lib64/vendor.qti.ims.rcsconfig@2.1.so
 vendor/lib64/vendor.qti.ims.rcssipaidlservice-V1-ndk.so
 vendor/lib64/vendor.qti.ims.rcsuceaidlservice-V1-ndk.so
 vendor/lib64/vendor.qti.ImsRtpService-aidl-Impl.so
-vendor/lib64/vendor.qti.ImsRtpService-V1-ndk.so
-vendor/lib64/vendor.qti.imsrtpservice@3.0.so
-vendor/lib64/vendor.qti.imsrtpservice@3.1.so
 vendor/lib64/vendor.qti.ImsRtpService-V1-ndk.so;MODULE_SUFFIX=-vendor
 vendor/lib64/vendor.qti.imsrtpservice@3.0.so;MODULE_SUFFIX=-vendor
 vendor/lib64/vendor.qti.imsrtpservice@3.1.so;MODULE_SUFFIX=-vendor
@@ -529,12 +541,6 @@ vendor/lib64/libqtikeymaster4.so
 vendor/bin/hw/android.hardware.security.keymint-service-qti
 vendor/etc/init/android.hardware.security.keymint-service-qti.rc
 vendor/etc/vintf/manifest/android.hardware.security.keymint-service-qti.xml
-vendor/lib64/android.hardware.security.keymint-V1-ndk.so
-vendor/lib64/android.hardware.security.keymint-V2-ndk.so
-vendor/lib64/android.hardware.security.keymint-V3-ndk.so
-vendor/lib64/android.hardware.security.keymint-V1-ndk.so;MODULE_SUFFIX=-vendor
-vendor/lib64/android.hardware.security.keymint-V2-ndk.so;MODULE_SUFFIX=-vendor
-vendor/lib64/android.hardware.security.keymint-V3-ndk.so;MODULE_SUFFIX=-vendor
 vendor/lib64/libqtikeymint.so
 
 # Listen
@@ -560,7 +566,9 @@ vendor/lib/libqcodec2_basecodec.so
 vendor/lib/libqcodec2_core.so
 vendor/lib/libqcodec2_hooks.so
 vendor/lib/libqcodec2_platform.so
+vendor/lib/qti.video.utils.videobufferlayout.so
 vendor/lib/libqcodec2_utils.so
+vendor/lib/libvideotxr.so
 vendor/lib/libqcodec2_v4l2codec.so
 vendor/lib64/libmmosal_vendor.so
 
@@ -592,11 +600,15 @@ vendor/etc/sec_config
 vendor/lib/libdiag.so
 vendor/lib64/libdiag.so
 vendor/lib64/libdsi_netctrl.so
+vendor/lib64/libnicm.so
+vendor/lib64/libnicm_dsi.so
+vendor/lib64/libnicm_utils.so
 vendor/lib64/libdsutils.so
 vendor/lib64/libidl.so
 vendor/lib64/libqcmaputils.so
 vendor/lib64/libqdi.so
 vendor/lib64/libqdp.so
+vendor/lib64/libqdpr.so
 vendor/lib64/libqmi.so
 vendor/lib64/libqmi_cci.so
 vendor/lib64/libqmi_client_helper.so
@@ -609,8 +621,6 @@ vendor/lib64/libqmiservices.so
 
 # Radio
 odm/lib64/vendor.oplus.hardware.appradio@1.0.so
-odm/lib64/vendor.oplus.hardware.communicationcenter-V1-ndk.so
-odm/lib64/vendor.oplus.hardware.communicationcenter-V2-ndk.so
 odm/lib64/vendor.oplus.hardware.communicationcenter-V1-ndk.so;MODULE_SUFFIX=-vendor
 odm/lib64/vendor.oplus.hardware.communicationcenter-V2-ndk.so;MODULE_SUFFIX=-vendor
 odm/lib64/vendor.oplus.hardware.ims@1.0.so
@@ -686,6 +696,35 @@ vendor/lib64/libqcrilNrFramework.so
 vendor/lib64/libqcrilNrLogger.so
 vendor/lib64/libqcrilNrQtiBus.so
 vendor/lib64/libqcrilNrQtiMutex.so
+vendor/lib64/qcrilInterfaces.so
+vendor/lib64/libril-legacy.so
+vendor/lib64/qcrilNrQmiModule.so
+vendor/lib64/libQtiRilLoadable.so
+vendor/lib64/qtiPeripheralMgr.so
+vendor/lib64/vendor.qti.hardware.radio.ims-V12-ndk.so
+vendor/lib64/vendor.qti.hardware.radio.am-V1-ndk.so
+vendor/lib64/vendor.qti.hardware.radio.qcrilhook-V1-ndk.so
+vendor/lib64/qcrilNr_aidl_common.so
+vendor/lib64/qcrilNr_aidl_IRadioConfig.so
+vendor/lib64/qcrilNr_aidl_IRadioMessaging.so
+vendor/lib64/qcrilNr_aidl_IRadioModem.so
+vendor/lib64/qcrilNr_aidl_IRadioNetwork.so
+vendor/lib64/qcrilNr_aidl_IRadioSim.so
+vendor/lib64/qcrilNr_aidl_IRadioVoice.so
+vendor/lib64/qcrilNr_aidl_IQtiRadioConfig.so
+vendor/lib64/qcrilNr_aidl_UimRemoteServer.so
+vendor/lib64/vendor.qti.hardware.radio.uim_remote_server-V1-ndk.so
+vendor/lib64/qcrilNr_aidl_UimRemoteClient.so
+vendor/lib64/vendor.qti.hardware.radio.uim_remote_client-V1-ndk.so
+vendor/lib64/qcrilNr_aidl_UimLpaService.so
+vendor/lib64/vendor.qti.hardware.radio.lpa-V1-ndk.so
+vendor/lib64/qcrilNr_aidl_UimService.so
+vendor/lib64/vendor.qti.hardware.radio.uim-V1-ndk.so
+vendor/lib64/qcrilNr_aidl_IRadioSap.so
+vendor/lib64/qcrilNr_aidl_SecureElementService.so
+vendor/lib64/qcrilNrSecureMode.so
+vendor/lib64/qcrild_libqcrilnr.so
+vendor/lib/qcrild_libqcrilnrutils.so
 vendor/lib64/libqcrildatactl.so
 vendor/lib64/libqrtr.so
 vendor/lib64/libqsocket.so
@@ -697,6 +736,7 @@ vendor/lib64/libsystem_health_mon.so
 vendor/lib64/qcrilMarshal.so
 vendor/lib64/qcrild_libqcrilnrutils.so
 vendor/lib64/qtiril-utils.so
+vendor/lib64/qcrilIntermodulemsgs.so
 vendor/lib64/qtiwakelock.so
 vendor/lib64/vendor.qti.hardware.radio.am@1.0.so
 vendor/lib64/vendor.qti.hardware.radio.atcmdfwd@1.0.so
@@ -925,12 +965,6 @@ vendor/lib64/vendor.qti.hardware.vpp@1.1.so
 
 # Widevine DRM
 vendor/apex/com.google.android.widevine.nonupdatable.apex
-vendor/bin/hw/android.hardware.drm-service.clearkey
-vendor/etc/init/android.hardware.drm-service.clearkey.rc
-vendor/etc/vintf/manifest/android.hardware.drm-service.clearkey.xml
-vendor/lib64/android.hardware.drm-V1-ndk.so
-vendor/lib64/android.hardware.drm-V1-ndk.so;MODULE_SUFFIX=-vendor
-
 
 # WiFi
 odm/bin/init.oplus.wifi.sh
@@ -961,6 +995,7 @@ system_ext/lib64/libwfdmmsrc_system.so|ab23a6ce749d1ecc9bef869fae0eb3a0e293d389
 system_ext/lib64/libwfdnative.so;SYMLINK=system_ext/priv-app/WfdService/lib/arm64/libwfdnative.so|f3c438b50e32156d630cb2f6ba608104fe5be421
 system_ext/lib64/libwfdrtsp.so|4595976a1897782e22fc7d519c7293d0a81b4d15
 system_ext/lib64/libwfdservice.so|9450ceb1750849a7aca7e38d1203e1e0277c76b0
+system_ext/lib64/vendor.qti.hardware.wifidisplaysession_aidl-V1-ndk.so|fe8948608788ec95ddb245943e20bd6510174cb01fed5115109d86d9cd438e7a
 system_ext/lib64/libwfdsinksm.so|18fa4c0fed1b5bc4c34a5c29ed11f67891c54ad3
 system_ext/lib64/libwfduibcinterface.so|1d0377b18ca2d204cb30c705cc5f7297308ba733
 system_ext/lib64/libwfduibcsink.so|c3508c6b7bf37d0efa8c5b688faf8345b06a546b
@@ -1005,5 +1040,5 @@ vendor/lib64/libwfduibcsinkinterface_vendor.so
 vendor/lib64/libwfduibcsrc_vendor.so
 vendor/lib64/libwfduibcsrcinterface_vendor.so
 vendor/lib64/libwfdutils_proprietary.so
-vendor/lib64/vendor.qti.hardware.wifidisplaysession@1.0.so;MODULE_SUFFIX=_vendor
+vendor/lib64/vendor.qti.hardware.wifidisplaysession@1.0.so;MODULE_SUFFIX=-vendor
 vendor/lib64/vendor.qti.hardware.wifidisplaysessionl@1.0-halimpl.so
