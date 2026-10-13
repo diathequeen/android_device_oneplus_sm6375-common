@@ -1,199 +1,178 @@
 #=============================================================================
-# Copyright (c) 2021 Qualcomm Technologies, Inc.
+# Copyright (c) 2020-2023 Qualcomm Technologies, Inc.
 # All Rights Reserved.
 # Confidential and Proprietary - Qualcomm Technologies, Inc.
 #
-# Copyright (c) 2012-2013, 2016-2020, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2012, 2014-2019, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are
-# met:
+# modification, are permitted provided that the following conditions are met:
 #     * Redistributions of source code must retain the above copyright
 #       notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above
-#       copyright notice, this list of conditions and the following
-#       disclaimer in the documentation and/or other materials provided
-#       with the distribution.
-#     * Neither the name of The Linux Foundation nor the names of its
-#       contributors may be used to endorse or promote products derived
-#       from this software without specific prior written permission.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of The Linux Foundation nor
+#       the names of its contributors may be used to endorse or promote
+#       products derived from this software without specific prior written
+#       permission.
 #
-# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
-# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
-# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
-# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NON-INFRINGEMENT ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #=============================================================================
 
-function configure_zram_parameters() {
-	MemTotalStr=`cat /proc/meminfo | grep MemTotal`
-	MemTotal=${MemTotalStr:16:8}
+rev=`cat /sys/devices/soc0/revision`
 
-	# Zram disk - 75% for < 2GB devices .
-	# For >2GB devices, size = 50% of RAM size. Limit the size to 4GB.
+if [ -d /proc/sys/walt ]; then
+	echo 4 > /sys/devices/system/cpu/cpu0/core_ctl/min_cpus
+        echo 6 > /sys/devices/system/cpu/cpu0/core_ctl/max_cpus
+	echo 60 > /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres
+	echo 40 > /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres
+	echo 100 > /sys/devices/system/cpu/cpu0/core_ctl/offline_delay_ms
+	echo 0 0 0 0 1 1 > /sys/devices/system/cpu/cpu0/core_ctl/not_preferred
 
-	let RamSizeGB="( $MemTotal / 1048576 ) + 1"
-	diskSizeUnit=M
-	if [ $RamSizeGB -le 2 ]; then
-		let zRamSizeMB="( $RamSizeGB * 1024 ) * 3 / 4"
-	else
-		let zRamSizeMB="( $RamSizeGB * 1024 ) / 2"
-	fi
+	echo 1 > /sys/devices/system/cpu/cpu0/core_ctl/enable
+	echo 0 > /sys/devices/system/cpu/cpu6/core_ctl/enable
 
-	# use MB avoid 32 bit overflow
-	if [ $zRamSizeMB -gt 4096 ]; then
-		let zRamSizeMB=4096
-	fi
+	echo 0 > /proc/sys/walt/sched_sbt_delay_windows
+	echo 0 > /proc/sys/walt/sched_sbt_pause_cpus
 
-	if [ -f /sys/block/zram0/disksize ]; then
-		if [ -f /sys/block/zram0/use_dedup ]; then
-			echo 1 > /sys/block/zram0/use_dedup
-		fi
-		echo "$zRamSizeMB""$diskSizeUnit" > /sys/block/zram0/disksize
+	echo 65 > /proc/sys/walt/sched_downmigrate
+	echo 71 > /proc/sys/walt/sched_upmigrate
+	echo 400 > /proc/sys/walt/sched_group_upmigrate
+	echo 385 > /proc/sys/walt/sched_group_downmigrate
+	echo 1 > /proc/sys/walt/sched_walt_rotate_big_tasks
+	echo 400000000 > /proc/sys/walt/sched_coloc_downmigrate_ns
+	echo 16000000 16000000 16000000 16000000 16000000 16000000 16000000 16000000 > /proc/sys/walt/sched_coloc_busy_hyst_cpu_ns
+	echo 0 > /proc/sys/walt/sched_coloc_busy_hysteresis_enable_cpus
+	echo 10 10 10 10 10 10 10 10 > /proc/sys/walt/sched_coloc_busy_hyst_cpu_busy_pct
+	echo 8500000 8500000 8500000 8500000 8500000 8500000 8500000 8500000 > /proc/sys/walt/sched_util_busy_hyst_cpu_ns
+	echo 0 > /proc/sys/walt/sched_util_busy_hysteresis_enable_cpus
+	echo 1 1 1 1 1 1 1 1 > /proc/sys/walt/sched_util_busy_hyst_cpu_util
+	echo 40 > /proc/sys/walt/sched_cluster_util_thres_pct
+	echo 30 > /proc/sys/walt/sched_idle_enough
+	echo 10 > /proc/sys/walt/sched_ed_boost
 
-		# ZRAM may use more memory than it saves if SLAB_STORE_USER
-		# debug option is enabled.
-		if [ -e /sys/kernel/slab/zs_handle ]; then
-			echo 0 > /sys/kernel/slab/zs_handle/store_user
-		fi
-		if [ -e /sys/kernel/slab/zspage ]; then
-			echo 0 > /sys/kernel/slab/zspage/store_user
-		fi
+	# set the threshold for low latency task boost feature which prioritize
+	# binder activity tasks
+	echo 325 > /proc/sys/walt/walt_low_latency_task_threshold
 
-		mkswap /dev/block/zram0
-		swapon /dev/block/zram0 -p 32758
-	fi
-}
+	# Turn off scheduler boost at the end
+	echo 0 > /proc/sys/walt/sched_boost
 
-function configure_memory_parameters() {
-	# Set Memory parameters.
+	# configure input boost settings
+	echo 1113600 0 0 0 0 0 0 0 > /proc/sys/walt/input_boost/input_boost_freq
+	echo 120 > /proc/sys/walt/input_boost/input_boost_ms
 
-	# Set swappiness to 100 for all targets
-	echo 100 > /proc/sys/vm/swappiness
+	echo "walt" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+	echo "walt" > /sys/devices/system/cpu/cpufreq/policy6/scaling_governor
 
-	# Disable wsf for all targets beacause we are using efk.
-	# wsf Range : 1..1000 So set to bare minimum value 1.
-	echo 1 > /proc/sys/vm/watermark_scale_factor
-	# Disable the feature of watermark boost for 8G and below device
-	if [ $MemTotal -le 8388608 ]; then
-		echo 0 > /proc/sys/vm/watermark_boost_factor
-	fi
-	configure_zram_parameters
+	echo 0 > /sys/devices/system/cpu/cpufreq/policy0/walt/down_rate_limit_us
+	echo 0 > /sys/devices/system/cpu/cpufreq/policy0/walt/up_rate_limit_us
+	echo 0 > /sys/devices/system/cpu/cpufreq/policy6/walt/down_rate_limit_us
+	echo 0 > /sys/devices/system/cpu/cpufreq/policy6/walt/up_rate_limit_us
 
-	#Spawn 1 kswapd threads which can help in fast reclaiming of pages
-	echo 1 > /proc/sys/vm/kswapd_threads
+	echo 0 > /sys/devices/system/cpu/cpufreq/policy0/walt/pl
+	echo 0 > /sys/devices/system/cpu/cpufreq/policy6/walt/pl
 
-	# Reserve extra free memory headroom to reduce direct-reclaim stalls
-	echo 131072 > /proc/sys/vm/min_free_kbytes
-}
+	echo 680000 > /sys/devices/system/cpu/cpufreq/policy0/walt/rtg_boost_freq
+	echo 0 > /sys/devices/system/cpu/cpufreq/policy6/walt/rtg_boost_freq
 
-# Core control parameters for silver
-echo 0 0 0 0 1 1 > /sys/devices/system/cpu/cpu0/core_ctl/not_preferred
-echo 4 > /sys/devices/system/cpu/cpu0/core_ctl/min_cpus
-echo 60 > /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres
-echo 40 > /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres
-echo 100 > /sys/devices/system/cpu/cpu0/core_ctl/offline_delay_ms
-echo 8 > /sys/devices/system/cpu/cpu0/core_ctl/task_thres
+	echo 1113600 > /sys/devices/system/cpu/cpufreq/policy0/walt/hispeed_freq
+	echo 1228800 > /sys/devices/system/cpu/cpufreq/policy6/walt/hispeed_freq
+else
+	echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+	echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy6/scaling_governor
+	echo 1 > /proc/sys/kernel/sched_pelt_multiplier
+fi
 
-# Enable Core control for Silver
-echo 1 > /sys/devices/system/cpu/cpu0/core_ctl/enable
+echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+echo 691200 > /sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq
 
-# Disable Core control on gold
-echo 0 > /sys/devices/system/cpu/cpu6/core_ctl/enable
-
-# Setting b.L scheduler parameters
-echo 65 > /proc/sys/kernel/sched_downmigrate
-echo 71 > /proc/sys/kernel/sched_upmigrate
-echo 85 > /proc/sys/kernel/sched_group_downmigrate
-echo 100 > /proc/sys/kernel/sched_group_upmigrate
-echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
-echo 0 > /proc/sys/kernel/sched_coloc_busy_hysteresis_enable_cpus
-echo 0 > /proc/sys/kernel/sched_busy_hysteresis_enable_cpus
-echo 5 > /proc/sys/kernel/sched_ravg_window_nr_ticks
-
-# disable unfiltering
-echo 20000000 > /proc/sys/kernel/sched_task_unfilter_period
+# Reset the RT boost, which is 1024 (max) by default.
+echo 0 > /proc/sys/kernel/sched_util_clamp_min_rt_default
 
 # cpuset parameters
-echo 0-3 > /dev/cpuset/background/cpus
-echo 0-3 > /dev/cpuset/system-background/cpus
+prjname=`getprop ro.boot.prjname`
+case "$prjname" in
+	"23091")
+		echo 0-3 > /dev/cpuset/background/cpus
+		echo 0-3 > /dev/cpuset/system-background/cpus
+	;;
+	*)
+		echo 0-5 > /dev/cpuset/background/cpus
+		echo 0-5 > /dev/cpuset/system-background/cpus
+	;;
+esac
 
-# Turn off scheduler boost at the end
-echo 0 > /proc/sys/kernel/sched_boost
-
-# configure governor settings for silver cluster
-echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
-
-# configure governor settings for gold cluster
-echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy6/scaling_governor
-
-# Enable bus-dcvs
-for device in /sys/devices/platform/soc
+# configure bus-dcvs
+bus_dcvs="/sys/devices/system/cpu/bus_dcvs"
+for device in $bus_dcvs/*
 do
-	for cpubw in $device/*cpu-cpu-ddr-bw/devfreq/*cpu-cpu-ddr-bw
-	do
-		cat $cpubw/available_frequencies | cut -d " " -f 1 > $cpubw/min_freq
-		echo "bw_hwmon" > $cpubw/governor
-		echo "762 1144 1720 2086 2597 2929 3879 5161 5931 6881 7980" > $cpubw/bw_hwmon/mbps_zones
-		echo 4 > $cpubw/bw_hwmon/sample_ms
-		echo 68 > $cpubw/bw_hwmon/io_percent
-		echo 20 > $cpubw/bw_hwmon/hist_memory
-		echo 0 > $cpubw/bw_hwmon/hyst_length
-		echo 80 > $cpubw/bw_hwmon/down_thres
-		echo 0 > $cpubw/bw_hwmon/guard_band_mbps
-		echo 250 > $cpubw/bw_hwmon/up_scale
-		echo 1600 > $cpubw/bw_hwmon/idle_mbps
-		echo 40 > $cpubw/polling_interval
-	done
-
-	# configure compute settings for silver latfloor
-	for latfloor in $device/*cpu0-cpu*latfloor/devfreq/*cpu0-cpu*latfloor
-	do
-		cat $latfloor/available_frequencies | cut -d " " -f 1 > $latfloor/min_freq
-		echo 8 > $latfloor/polling_interval
-	done
-
-	# configure compute settings for gold latfloor
-	for latfloor in $device/*cpu6-cpu*latfloor/devfreq/*cpu6-cpu*latfloor
-	do
-		cat $latfloor/available_frequencies | cut -d " " -f 1 > $latfloor/min_freq
-		echo 8 > $latfloor/polling_interval
-	done
-
-	# configure mem_latency settings for DDR scaling
-	for memlat in $device/*lat/devfreq/*lat
-	do
-		cat $memlat/available_frequencies | cut -d " " -f 1 > $memlat/min_freq
-		echo 8 > $memlat/polling_interval
-		echo 400 > $memlat/mem_latency/ratio_ceil
-	done
-
-	#Gold CPU6 L3 ratio ceil
-	for l3gold in $device/*cpu6-cpu-l3-lat/devfreq/*cpu6-cpu-l3-lat
-	do
-		echo 4000 > $l3gold/mem_latency/ratio_ceil
-		echo 25000 > $l3gold/mem_latency/wb_filter_ratio
-		echo 60 > $l3gold/mem_latency/wb_pct_thres
-	done
-
-	#Gold CPU7 L3 ratio ceil
-	for l3gold in $device/*cpu7-cpu-l3-lat/devfreq/*cpu7-cpu-l3-lat
-	do
-		echo 4000 > $l3gold/mem_latency/ratio_ceil
-		echo 25000 > $l3gold/mem_latency/wb_filter_ratio
-		echo 60 > $l3gold/mem_latency/wb_pct_thres
-	done
-
+	if [ -e $device/boost_freq ]; then
+		cat $device/hw_min_freq > $device/boost_freq
+	fi
 done
 
-echo N > /sys/module/lpm_levels/parameters/sleep_disabled
+for ddrbw in $bus_dcvs/DDR/*bwmon-ddr
+do
+	echo "1720 2086 2597 2929 3879 5161 5931 6881 7980" > $ddrbw/mbps_zones
+	echo 4 > $ddrbw/sample_ms
+	echo 68 > $ddrbw/io_percent
+	echo 20 > $ddrbw/hist_memory
+	echo 0 > $ddrbw/hyst_length
+	echo 1 > $ddrbw/idle_length
+	echo 80 > $ddrbw/down_thres
+	echo 0 > $ddrbw/guard_band_mbps
+	echo 250 > $ddrbw/up_scale
+	echo 1600 > $ddrbw/idle_mbps
+	echo 1804000 > $ddrbw/max_freq
+	echo 40 > $ddrbw/window_ms
+done
 
-configure_memory_parameters
+for l3gold in $bus_dcvs/L3/*gold
+do
+	echo 4000 > $l3gold/ipm_ceil
+done
+
+echo s2idle > /sys/power/mem_sleep
+
+if [ -e /sys/devices/system/cpu/qcom_lpm/parameters/sleep_disabled ]; then
+	echo N > /sys/devices/system/cpu/qcom_lpm/parameters/sleep_disabled
+fi
+
+# Change console log level as per console config property
+console_config=`getprop persist.vendor.console.silent.config`
+case "$console_config" in
+	"1")
+		echo "Enable console config to $console_config"
+		echo 0 > /proc/sys/kernel/printk
+	;;
+	*)
+		echo "Enable console config to $console_config"
+	;;
+esac
+
+# set rq_affinity to 2 on ufs devices
+for sd in /sys/block/sd*/queue/rq_affinity
+do
+	echo 2 > $sd
+done
+
+#config fg and top cpu shares
+echo 5120 > /dev/cpuctl/top-app/cpu.shares
+echo 4096 > /dev/cpuctl/foreground/cpu.shares
+
+echo 2048 > /dev/cpuctl/sstop/cpu.shares
+echo 512 > /dev/cpuctl/log/cpu.shares
 
 setprop vendor.post_boot.parsed 1
