@@ -30,15 +30,14 @@ PRODUCT_PACKAGES += \
 BOARD_SHIPPING_API_LEVEL := 34
 PRODUCT_SHIPPING_API_LEVEL := 34
 
-# Audio
-PRODUCT_PACKAGES += \
+# Audio (I disabled it to avoid kernel-headers errors when building with prebuilt kernel)
+#PRODUCT_PACKAGES += \
     android.hardware.audio@6.0-impl \
     android.hardware.audio.effect@6.0-impl \
     android.hardware.audio.service \
     android.hardware.bluetooth.audio-impl \
     android.hardware.soundtrigger@2.3-impl \
     audio.bluetooth.default \
-    audio.primary.blair \
     audio.r_submix.default \
     audio.usb.default \
     audioadsprpcd \
@@ -46,8 +45,7 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing \
-    libvolumelistener \
-    sound_trigger.primary.blair
+    libvolumelistener
 
 AUDIO_HAL_DIR := hardware/qcom-caf/sm8350/audio
 
@@ -151,11 +149,6 @@ PRODUCT_PACKAGES += \
     ueventd.qcom.rc
 
 $(call soong_config_set,libinit,vendor_init_lib,//$(LOCAL_PATH):libinit_oplus)
-
-# IPACM
-PRODUCT_PACKAGES += \
-    ipacm \
-    IPACM_cfg.xml
 
 # IPC router config
 PRODUCT_COPY_FILES += \
