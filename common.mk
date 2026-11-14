@@ -49,27 +49,10 @@ PRODUCT_SHIPPING_API_LEVEL := 34
 
 AUDIO_HAL_DIR := hardware/qcom-caf/sm8350/audio
 
-# Audio Configs
-PRODUCT_COPY_FILES += \
-    $(AUDIO_HAL_DIR)/configs/holi/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
-    $(AUDIO_HAL_DIR)/configs/holi/audio_platform_info.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_platform_info.xml \
-    $(AUDIO_HAL_DIR)/configs/holi/audio_platform_info_intcodec.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_platform_info_intcodec.xml \
-    $(AUDIO_HAL_DIR)/configs/holi/audio_tuning_mixer.txt:$(TARGET_COPY_OUT_VENDOR)/etc/audio_tuning_mixer.txt \
-    $(LOCAL_PATH)/audio/audio_io_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_io_policy.conf \
-    $(LOCAL_PATH)/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
-    $(LOCAL_PATH)/audio/bluetooth_hearing_aid_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_hearing_aid_audio_policy_configuration.xml
-
-PRODUCT_COPY_FILES += \
-    frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_holi/r_submix_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_holi/usb_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml
-
-# Boot control
+# Boot control HAL
 PRODUCT_PACKAGES += \
-    android.hardware.boot-service.qti \
-    android.hardware.boot-service.qti.recovery
+    android.hardware.boot@1.0-impl \
+    android.hardware.boot@1.0-service
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -117,46 +100,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.3-service.oplus
 
-# GPS
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/gps.conf:$(TARGET_COPY_OUT_ODM)/etc/gps.conf
-
 # Health
 PRODUCT_PACKAGES += \
     android.hardware.health-service.qti
-
-# HotwordEnrollement app permissions
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/privapp-permissions-hotword.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-hotword.xml
-
-# Init
-PRODUCT_PACKAGES += \
-    fstab.default \
-    fstab.default.vendor_ramdisk \
-    init.class_main.sh \
-    init.kernel.post_boot-blair.sh \
-    init.kernel.post_boot-holi.sh \
-    init.kernel.post_boot.sh \
-    init.oplus.rc \
-    init.qcom.early_boot.sh \
-    init.qcom.post_boot.sh \
-    init.qcom.rc \
-    init.qcom.sh \
-    init.qti.kernel.rc \
-    init.recovery.qcom.rc \
-    init.target.rc \
-    ueventd.oplus.rc \
-    ueventd.qcom.rc
-
-$(call soong_config_set,libinit,vendor_init_lib,//$(LOCAL_PATH):libinit_oplus)
-
-# IPC router config
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sec_config:$(TARGET_COPY_OUT_VENDOR)/etc/sec_config
-
-# IRQ
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/msm_irqbalance.conf:$(TARGET_COPY_OUT_VENDOR)/etc/msm_irqbalance.conf
 
 # Kernel
 PRODUCT_ENABLE_UFFD_GC := true
@@ -170,12 +116,6 @@ $(call soong_config_set,lineage_health,charging_control_charging_path,/sys/class
 # LiveDisplay
 PRODUCT_PACKAGES += \
     vendor.lineage.livedisplay-service.oplus
-
-# Media
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/media/media_codecs_blair.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_blair.xml \
-    $(LOCAL_PATH)/configs/media/media_codecs_performance_blair.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance_blair.xml \
-    $(LOCAL_PATH)/configs/media/media_profiles_blair.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_vendor.xml
 
 PRODUCT_PACKAGES += \
     android.media.audio.common.types-V1-cpp
@@ -263,25 +203,10 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.vulkan.deqp.level-2020-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml
 
-# Perf
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
-
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power-service.lineage-libperfmgr \
     libqti-perfd-client
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
-
-# Public Libraries
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
-
-# QCOM
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/privapp-permissions-qti.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-qti.xml
 
 # QNS
 PRODUCT_PACKAGES += \
@@ -382,11 +307,6 @@ PRODUCT_PACKAGES += \
     libwifi-hal-qcom \
     wpa_supplicant \
     wpa_supplicant.conf
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
-    $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
-    $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_ODM)/vendor/etc/wifi/WCNSS_qcom_cfg.ini
 
 # WiFi firmware symlinks
 PRODUCT_PACKAGES += \
