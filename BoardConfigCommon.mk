@@ -123,12 +123,12 @@ TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
 TARGET_BOARD_PLATFORM := blair
 
 # Properties // from AOSPDTGEN
-TARGET_SYSTEM_PROP += $(DEVICE_PATH)/properties/system.prop
-TARGET_VENDOR_PROP += $(DEVICE_PATH)/properties/vendor.prop
-TARGET_PRODUCT_PROP += $(DEVICE_PATH)/properties/product.prop
-TARGET_SYSTEM_EXT_PROP += $(DEVICE_PATH)/properties/system_ext.prop
-TARGET_SYSTEM_DLKM_PROP += $(DEVICE_PATH)/properties/system_dlkm.prop
-TARGET_ODM_PROP += $(DEVICE_PATH)/properties/odm.prop
+TARGET_SYSTEM_PROP += $(COMMON_PATH)/properties/system.prop
+TARGET_VENDOR_PROP += $(COMMON_PATH)/properties/vendor.prop
+TARGET_PRODUCT_PROP += $(COMMON_PATH)/properties/product.prop
+TARGET_SYSTEM_EXT_PROP += $(COMMON_PATH)/properties/system_ext.prop
+TARGET_SYSTEM_DLKM_PROP += $(COMMON_PATH)/properties/system_dlkm.prop
+TARGET_ODM_PROP += $(COMMON_PATH)/properties/odm.prop
 
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
