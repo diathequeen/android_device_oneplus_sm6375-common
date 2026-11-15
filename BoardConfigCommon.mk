@@ -130,9 +130,6 @@ TARGET_SYSTEM_EXT_PROP += $(COMMON_PATH)/properties/system_ext.prop
 TARGET_SYSTEM_DLKM_PROP += $(COMMON_PATH)/properties/system_dlkm.prop
 TARGET_ODM_PROP += $(COMMON_PATH)/properties/odm.prop
 
-# QCOM hardware
-BOARD_USES_QCOM_HARDWARE := true
-
 # Recovery
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
