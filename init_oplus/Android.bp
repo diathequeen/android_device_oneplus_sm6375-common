@@ -21,13 +21,6 @@ prebuilt_etc {
 }
 
 prebuilt_etc {
-    name: "init.oplus.display.rc",
-    src: "init.oplus.display.rc",
-    sub_dir: "init/hw",
-    device_specific: true,
-}
-
-prebuilt_etc {
     name: "init.oplus.face.rc",
     src: "init.oplus.face.rc",
     device_specific: true,
@@ -49,13 +42,6 @@ prebuilt_etc {
     name: "init.oplus.sensor.rc",
     src: "init.oplus.sensor.rc",
     sub_dir: "init",
-    device_specific: true,
-}
-
-prebuilt_etc {
-    name: "init.oplus.wifi.rc",
-    src: "init.oplus.wifi.rc",
-    sub_dir: "init/hw",
     device_specific: true,
 }
 
@@ -93,13 +79,6 @@ sh_binary {
 sh_binary {
     name: "init.oplus.fingerprints.sh",
     src: "init.oplus.fingerprints.sh",
-    sub_dir: "bin",
-    device_specific: true,
-}
-
-sh_binary {
-    name: "init.oplus.wifi.sh",
-    src: "init.oplus.wifi.sh",
     sub_dir: "bin",
     device_specific: true,
 }
