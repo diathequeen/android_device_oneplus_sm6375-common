@@ -122,17 +122,19 @@ TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
 # Platform
 TARGET_BOARD_PLATFORM := blair
 
-# Properties
-TARGET_ODM_PROP += $(COMMON_PATH)/odm.prop
-TARGET_PRODUCT_PROP += $(COMMON_PATH)/product.prop
-TARGET_SYSTEM_EXT_PROP += $(COMMON_PATH)/system_ext.prop
-TARGET_SYSTEM_PROP += $(COMMON_PATH)/system.prop
-TARGET_VENDOR_PROP += $(COMMON_PATH)/vendor.prop
+# Properties // from AOSPDTGEN
+TARGET_SYSTEM_PROP += $(DEVICE_PATH)/properties/system.prop
+TARGET_VENDOR_PROP += $(DEVICE_PATH)/properties/vendor.prop
+TARGET_PRODUCT_PROP += $(DEVICE_PATH)/properties/product.prop
+TARGET_SYSTEM_EXT_PROP += $(DEVICE_PATH)/properties/system_ext.prop
+TARGET_SYSTEM_DLKM_PROP += $(DEVICE_PATH)/properties/system_dlkm.prop
+TARGET_ODM_PROP += $(DEVICE_PATH)/properties/odm.prop
 
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
 
 # Recovery
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/init/fstab.qcom
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
