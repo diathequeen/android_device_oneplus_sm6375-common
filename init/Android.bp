@@ -28,20 +28,6 @@ prebuilt_etc {
 }
 
 prebuilt_etc {
-    name: "init.qcom.usb.rc",
-    src: "init.qcom.usb.rc",
-    sub_dir: "init/hw",
-    vendor: true,
-}
-
-prebuilt_etc {
-    name: "init.qti.display_boot.rc",
-    src: "init.qti.display_boot.rc",
-    sub_dir: "init",
-    vendor: true,
-}
-
-prebuilt_etc {
     name: "init.qti.kernel.rc",
     src: "init.qti.kernel.rc",
     sub_dir: "init/hw",
@@ -71,7 +57,7 @@ prebuilt_etc {
 
 prebuilt_etc {
     name: "init.thermal-engine-v2.rc",
-    src: "init.thermal-engine-v2.rc",
+    src: "init_thermal-engine-v2.rc",
     sub_dir: "init",
     vendor: true,
 }
@@ -87,8 +73,8 @@ prebuilt_etc {
 // These scripts are usually located at vendor/bin in your OTA dump...
 
 sh_binary {
-    name: "init.at.class.main.sh",
-    src: "init.at.class.main.sh",
+    name: "init.at.class_main.sh",
+    src: "init.at.class_main.sh",
     sub_dir: "bin",
     vendor: true,
 }
@@ -101,8 +87,8 @@ sh_binary {
 }
 
 sh_binary {
-    name: "init.class.main.sh",
-    src: "init.class.main.sh",
+    name: "init.class_main.sh",
+    src: "init.class_main.sh",
     sub_dir: "bin",
     vendor: true,
 }
@@ -150,20 +136,6 @@ sh_binary {
 }
 
 sh_binary {
-    name: "init.qcom.usb.sh",
-    src: "init.qcom.usb.sh",
-    sub_dir: "bin",
-    vendor: true,
-}
-
-sh_binary {
-    name: "init.qti.display_boot.sh",
-    src: "init.qti.display_boot.sh",
-    sub_dir: "bin",
-    vendor: true,
-}
-
-sh_binary {
     name: "init.qti.kernel.sh",
     src: "init.qti.kernel.sh",
     sub_dir: "bin",
@@ -176,8 +148,8 @@ sh_binary {
 // P.S. For custom ROM with OPPO devices you will need to deprecate my_* partitions from fstab. Do it carefully, a missed flag can cause problems with partitions mounting.
 
 prebuilt_etc {
-    name: "fstab.default",
-    src: "fstab.default",
+    name: "fstab.qcom",
+    src: "fstab.qcom",
     vendor: true,
     vendor_ramdisk_available: true, // Thus we define that recovery or vendor_boot can access it.
 }
