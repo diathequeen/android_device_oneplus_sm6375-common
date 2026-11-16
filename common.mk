@@ -7,6 +7,9 @@
 # Add common definitions for Qualcomm
 $(call inherit-product, hardware/qcom-caf/common/common.mk)
 
+# Storage
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
+
 # A/B
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
 
@@ -229,17 +232,7 @@ $(call inherit-product, hardware/oplus/oplus-fwk/oplus-fwk.mk)
 PRODUCT_PACKAGES += \
     android.hardware.sensors-service.multihal
 
-# Soong namespaces
-PRODUCT_SOONG_NAMESPACES += \
-    $(LOCAL_PATH) \
-    hardware/google/interfaces \
-    hardware/google/pixel \
-    hardware/oplus \
-    hardware/lineage/interfaces/power-libperfmgr \
-    hardware/qcom-caf/common/libqti-perfd-client
 
-# Storage
-$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
 # Telephony
 PRODUCT_PACKAGES += \
@@ -313,6 +306,17 @@ PRODUCT_PACKAGES += \
     firmware_wlanmdsp.otaupdate_symlink \
     firmware_wlan_mac.bin_symlink \
     firmware_WCNSS_qcom_cfg.ini_symlink
+
+# Soong namespaces
+PRODUCT_SOONG_NAMESPACES += \
+    $(LOCAL_PATH) \
+    frameworks/opt/net/wifi/libwifi_hal \
+    hardware/google/interfaces \
+    hardware/google/pixel \
+    hardware/oplus \
+    hardware/lineage/interfaces/power-libperfmgr \
+    hardware/qcom-caf/common/libqti-perfd-client \
+    hardware/qcom-caf/wlan/qcwcn
 
 # Inherit the proprietary files
 $(call inherit-product, vendor/oneplus/sm6375-common/sm6375-common-vendor.mk)
