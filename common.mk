@@ -33,8 +33,8 @@ PRODUCT_PACKAGES += \
 BOARD_SHIPPING_API_LEVEL := 34
 PRODUCT_SHIPPING_API_LEVEL := 34
 
-# Audio (I disabled it to avoid kernel-headers errors when building with prebuilt kernel)
-#PRODUCT_PACKAGES += \
+# Audio (commented out due to kernel isn't being built inline.)
+# PRODUCT_PACKAGES += \
     android.hardware.audio@6.0-impl \
     android.hardware.audio.effect@6.0-impl \
     android.hardware.audio.service \
@@ -50,18 +50,16 @@ PRODUCT_SHIPPING_API_LEVEL := 34
     libqcomvoiceprocessing \
     libvolumelistener
 
-AUDIO_HAL_DIR := hardware/qcom-caf/sm8350/audio
+# AUDIO_HAL_DIR := hardware/qcom-caf/sm6375-blair/audio
 
-# Boot control HAL
+# Boot control
 PRODUCT_PACKAGES += \
-    android.hardware.boot@1.0-impl \
-    android.hardware.boot@1.0-service
+    android.hardware.boot-service.qti \
+    android.hardware.boot-service.qti.recovery
 
 # Camera
 PRODUCT_PACKAGES += \
-    android.hardware.camera.provider@2.4-impl \
-    android.hardware.camera.provider@2.4-service_64 \
-    libcamera_metadata_shim
+    android.hardware.camera.provider-V3-ndk.vendor
 
 # Dalvik vm configs
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
@@ -73,17 +71,23 @@ PRODUCT_SET_DEBUGFS_RESTRICTIONS := true
 PRODUCT_PACKAGES += \
     init.qti.display_boot.rc \
     init.qti.display_boot.sh \
+    vendor.qti.hardware.display.allocator-service \
+    vendor.qti.hardware.display.composer-service \
+    vendor.qti.hardware.display.composer3-V1-ndk.vendor \
+    vendor.qti.hardware.display.config-V2-ndk.vendor \
+    vendor.qti.hardware.display.demura-service \
+    vendor.qti.hardware.display.demura-V1-ndk.vendor \
     libmemutils \
     libtinyxml \
     libtinyxml2 \
     vndservicemanager
 
-PRODUCT_PACKAGES += \
-    android.hardware.graphics.mapper@4.0-impl-qti-display \
-    vendor.qti.hardware.display.allocator-service \
-    vendor.qti.hardware.display.composer-service.rc \
-    vendor.qti.hardware.display.composer-service.xml \
-    vendor.qti.hardware.memtrack-service
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml
+
+PRODUCT_SOONG_NAMESPACES += \
+    vendor/qcom/opensource/commonsys-intf/display \
+    hardware/qcom-caf/sm6375-blair/display
 
 # Doze
 PRODUCT_PACKAGES += \
@@ -100,8 +104,7 @@ PRODUCT_PACKAGES += \
     fastbootd
 
 # Fingerprint
-PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.3-service.oplus
+$(call soong_config_set_bool,qtidisplay,oplus_udfps,true)
 
 # Health
 PRODUCT_PACKAGES += \
@@ -115,15 +118,6 @@ PRODUCT_PACKAGES += \
     vendor.lineage.health-service.default
 
 $(call soong_config_set,lineage_health,charging_control_charging_path,/sys/class/oplus_chg/battery/mmi_charging_enable)
-
-# LiveDisplay
-PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay-service.oplus
-
-PRODUCT_PACKAGES += \
-    android.media.audio.common.types-V1-cpp
-
-$(call soong_config_set_bool,stagefright,target_disable_thumbnail_block_model,true)
 
 # NFC
 PRODUCT_PACKAGES += \
@@ -228,11 +222,19 @@ PRODUCT_PACKAGES += \
 
 $(call inherit-product, hardware/oplus/oplus-fwk/oplus-fwk.mk)
 
+PRODUCT_SOONG_NAMESPACES += \
+    vendor/qcom/opensource/dataservices
+
+# OnePlus Framework
+PRODUCT_PACKAGES += \
+    oplus-fwk
+
+PRODUCT_SOONG_NAMESPACES += \
+    hardware/oplus
+
 # Sensors
 PRODUCT_PACKAGES += \
     android.hardware.sensors-service.multihal
-
-
 
 # Telephony
 PRODUCT_PACKAGES += \
@@ -255,9 +257,18 @@ PRODUCT_PACKAGES += \
 PRODUCT_BOOT_JARS += \
     telephony-ext
 
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.telephony.cdma.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.cdma.xml \
+    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.gsm.xml \
+    frameworks/native/data/etc/android.hardware.telephony.ims.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.ims.xml \
+    frameworks/native/data/etc/android.hardware.telephony.mbms.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.mbms.xml
+
 # Thermal
 PRODUCT_PACKAGES += \
     android.hardware.thermal-service.qti
+
+PRODUCT_SOONG_NAMESPACES += \
+    hardware/qcom-caf/thermal
 
 # Touch
 PRODUCT_PACKAGES += \
@@ -301,22 +312,23 @@ PRODUCT_PACKAGES += \
     wpa_supplicant \
     wpa_supplicant.conf
 
+PRODUCT_SOONG_NAMESPACES += \
+    $(LOCAL_PATH) \
+    frameworks/opt/net/wifi/libwifi_hal \
+    hardware/qcom-caf/wlan/qcwcn
+
 # WiFi firmware symlinks
 PRODUCT_PACKAGES += \
     firmware_wlanmdsp.otaupdate_symlink \
     firmware_wlan_mac.bin_symlink \
     firmware_WCNSS_qcom_cfg.ini_symlink
 
-# Soong namespaces
+# Other namespaces
 PRODUCT_SOONG_NAMESPACES += \
-    $(LOCAL_PATH) \
-    frameworks/opt/net/wifi/libwifi_hal \
-    hardware/google/interfaces \
-    hardware/google/pixel \
-    hardware/oplus \
-    hardware/lineage/interfaces/power-libperfmgr \
-    hardware/qcom-caf/common/libqti-perfd-client \
-    hardware/qcom-caf/wlan/qcwcn
+hardware/google/interfaces \
+hardware/google/pixel \
+hardware/lineage/interfaces/power-libperfmgr \
+hardware/qcom-caf/common/libqti-perfd-client
 
 # Inherit the proprietary files
 $(call inherit-product, vendor/oneplus/sm6375-common/sm6375-common-vendor.mk)
