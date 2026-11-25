@@ -68,14 +68,20 @@ LOC_HIDL_VERSION := 4.0
 
 # HIDL
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
-    hardware/oplus/vintf/device_framework_matrix.xml \
-    hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml
+	hardware/oplus/vintf/device_framework_matrix.xml \
+	hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml
 
-# camry and blair SM6375 doesn't have unified manifest, they're separated and might be both needed at the same time...
-DEVICE_MANIFEST_FILE += $(COMMON_PATH)/vintf/manifest_blair.xml \
-			$(COMMON_PATH)/vintf/manifest_holi.xml
+DEVICE_FRAMEWORK_MANIFEST_FILE := $(COMMON_PATH)/vintf/framework_manifest.xml
+
+DEVICE_MANIFEST_FILE += \
+	$(COMMON_PATH)/vintf/manifest_blair.xml \
+	$(COMMON_PATH)/vintf/manifest_holi.xml
+
+ODM_MANIFEST_FILES += \
+	$(COMMON_PATH)/vintf/telephony_manifest_dsds.xml \
+	$(COMMON_PATH)/vintf/telephony_manifest_ssss.xml
+
 DEVICE_MATRIX_FILE := hardware/qcom-caf/common/compatibility_matrix.xml
-# ODM_MANIFEST_FILES := $(COMMON_PATH)/manifest_odm.xml // I am not sure how to build manifest_odm for camry..
 
 # Kernel
 BOARD_BOOT_HEADER_VERSION := 4
