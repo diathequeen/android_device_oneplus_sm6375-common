@@ -60,7 +60,7 @@ TARGET_GRALLOC_HANDLE_HAS_RESERVED_SIZE := true
 TARGET_SCREEN_DENSITY := 395
 
 # Filesystem
-TARGET_FS_CONFIG_GEN := $(COMMON_PATH)/config.fs
+# TARGET_FS_CONFIG_GEN := $(COMMON_PATH)/config.fs
 
 # GPS
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
@@ -68,19 +68,101 @@ LOC_HIDL_VERSION := 4.0
 
 # HIDL
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
-    hardware/oplus/vintf/device_framework_matrix.xml \
-    hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml
+	hardware/oplus/vintf/device_framework_matrix.xml \
+	hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml
 
-# camry and blair SM6375 doesn't have unified manifest, they're separated and might be both needed at the same time...
-DEVICE_MANIFEST_FILE += $(COMMON_PATH)/vintf/manifest_blair.xml \
-			$(COMMON_PATH)/vintf/manifest_holi.xml
+DEVICE_FRAMEWORK_MANIFEST_FILE := $(COMMON_PATH)/vintf/framework_manifest.xml
+
+DEVICE_MANIFEST_FILE += \
+	$(COMMON_PATH)/vintf/manifest_blair.xml \
+	$(COMMON_PATH)/vintf/manifest_holi.xml
+
+ODM_MANIFEST_FILES += \
+	$(COMMON_PATH)/vintf/telephony_manifest_dsds.xml \
+	$(COMMON_PATH)/vintf/telephony_manifest_ssss.xml
+
 DEVICE_MATRIX_FILE := hardware/qcom-caf/common/compatibility_matrix.xml
-# ODM_MANIFEST_FILES := $(COMMON_PATH)/manifest_odm.xml // I am not sure how to build manifest_odm for camry..
 
 # Kernel
+
+BOARD_BOOTCONFIG := \
+    androidboot.hardware=qcom \
+    androidboot.hypervisor.protected_vm.supported=true \
+    androidboot.load_modules_parallel=true \
+    androidboot.memcg=1 \
+    androidboot.serialconsole=0 \
+    androidboot.usbcontroller=a600000.dwc3 \
+    androidboot.vendor.qspa=true
+
+BOARD_KERNEL_BASE := 0x00000000
+BOARD_KERNEL_CMDLINE := sysctl.kernel.firmware_config.force_sysfs_fallback=1
+BOARD_KERNEL_IMAGE_NAME := Image
+BOARD_KERNEL_PAGESIZE := 4096
+BOARD_USES_GENERIC_KERNEL_IMAGE := true
+
+TARGET_KERNEL_SOURCE := kernel/oneplus/common-sm6375
+TARGET_KERNEL_CONFIG := \
+      camry_defconfig
+
+# Kernel modules
+BOARD_VENDOR_KERNEL_MODULES_LOAD := $(strip $(shell cat $(COMMON_PATH)/modules/modules.load))
+BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE := $(COMMON_PATH)/modules/modules.blocklist
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat $(COMMON_PATH)/modules/modules.load.vendor_boot))
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_BLOCKLIST_FILE := $(BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE)
+BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := $(strip $(shell cat $(COMMON_PATH)/modules/modules.load.recovery))
+BOOT_KERNEL_MODULES += $(BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD)
+
+TARGET_KERNEL_EXT_MODULE_ROOT := kernel/oneplus/modules-sm6375
+TARGET_KERNEL_EXT_MODULES := \
+      qcom/opensource/audio-kernel \
+      qcom/opensource/bt-kernel \
+      qcom/opensource/camera-kernel \
+      qcom/opensource/dataipa \
+      qcom/opensource/datarmnet \
+      qcom/opensource/datarmnet-ext/mem \
+      qcom/opensource/datarmnet-ext/aps \
+      qcom/opensource/datarmnet-ext/offload \
+      qcom/opensource/datarmnet-ext/shs \
+      qcom/opensource/datarmnet-ext/perf \
+      qcom/opensource/datarmnet-ext/perf_tether \
+      qcom/opensource/datarmnet-ext/sch \
+      qcom/opensource/datarmnet-ext/wlan \
+      qcom/opensource/display-drivers/msm \
+      qcom/opensource/dsp-kernel \
+      qcom/opensource/graphics-kernel \
+      qcom/opensource/mm-drivers/hw_fence \
+      qcom/opensource/mm-drivers/msm_ext_display \
+      qcom/opensource/mm-drivers/sync_fence \
+      qcom/opensource/mmrm-driver \
+      qcom/opensource/securemsm-kernel \
+      qcom/opensource/video-driver \
+      qcom/opensource/wlan/platform \
+      qcom/opensource/wlan/qcacld-3.0 \
+      nxp/opensource/driver
+
+TARGET_KERNEL_EXT_MODULES += \
+    oplus/hardware/radio/kernel/mdmfeature:kbuild \
+    oplus/kernel/cpu/thermal:kbuild \
+    oplus/kernel/device_info/pogo_keyboard:kbuild \
+    oplus/kernel/device_info/tri_state_key:kbuild \
+    oplus/kernel/dfr:kbuild \
+    oplus/kernel/graphics:kbuild \
+    oplus/kernel/network/oplus_network_oem_qmi:kbuild \
+    oplus/kernel/network/oplus_network_esim:kbuild \
+    oplus/kernel/network/oplus_network_sim_detect:kbuild \
+    oplus/kernel/network/oplus_rf_cable_monitor:kbuild \
+    oplus/kernel/touchpanel/oplus_touchscreen_v2/touch_custom:kbuild \
+    oplus/kernel/touchpanel/oplus_touchscreen_v2:kbuild \
+    oplus/kernel/touchpanel/synaptics_hbp:kbuild \
+    oplus/kernel/tp/hbp/hbp:kbuild \
+    oplus/secure/biometrics/fingerprints/bsp/uff/driver:kbuild \
+    oplus/secure/common/bsp/drivers/oplus_secure_common \
+    oplus/sensor/kernel/oplus_consumer_ir:kbuild \
+    oplus/sensor/kernel/qcom/sensor:kbuild
+
+# Boot
 BOARD_BOOT_HEADER_VERSION := 4
-BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
-BOARD_RAMDISK_USE_LZ4 := true
+BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
 
 # Init Boot
 BOARD_INIT_BOOT_HEADER_VERSION := 4
@@ -121,6 +203,7 @@ TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
 
 # Platform
 TARGET_BOARD_PLATFORM := blair
+BOARD_USES_QCOM_HARDWARE := true
 
 # Properties // from AOSPDTGEN
 TARGET_SYSTEM_PROP += $(COMMON_PATH)/properties/system.prop
@@ -132,14 +215,10 @@ TARGET_ODM_PROP += $(COMMON_PATH)/properties/odm.prop
 
 # Recovery
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
-BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/init/fstab.qcom
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
-
-# Releasetools
-TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)
 
 # RIL
 ENABLE_VENDOR_RIL_SERVICE := true
