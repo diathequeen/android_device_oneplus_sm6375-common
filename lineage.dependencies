@@ -8,6 +8,10 @@
     "target_path": "kernel/oneplus/common-sm6375"
   },
   {
+    "repository": "android_kernel_oneplus_sm6375-msm",
+    "target_path": "kernel/oneplus/msm-sm6375"
+  }
+  {
     "repository": "android_kernel_oneplus_sm6375-devicetrees",
     "target_path": "kernel/oneplus/devicetrees-sm6375"
   },
